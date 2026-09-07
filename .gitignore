@@ -1,0 +1,48 @@
+# Dependências e artefatos do Next.js
+node_modules/
+.next/
+out/
+dist/
+build/
+
+# Configuração local (publique somente o modelo vazio)
+.env
+.env.*
+!.env.example
+
+# Dados locais, backups e arquivos auxiliares do SQLite
+data/*.db
+data/*.db-*
+data/*.sqlite
+data/*.sqlite-*
+data/*.sqlite3
+data/*.sqlite3-*
+backup/
+backups/
+*.db
+*.db-*
+*.sqlite
+*.sqlite-*
+*.sqlite3
+*.sqlite3-*
+
+# Segredos, certificados e chaves privadas
+*.pem
+*.key
+*.p12
+*.pfx
+*.crt
+
+# Logs, caches e arquivos temporários
+*.log
+*.tmp
+*.temp
+.cache/
+coverage/
+
+# Editores e sistema operacional
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
+desktop.ini

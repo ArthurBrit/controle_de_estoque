@@ -14,7 +14,7 @@ html{scroll-behavior:smooth}
   .main>header{position:sticky;top:0;z-index:15;animation:header-elevate linear both;animation-timeline:scroll(root block);animation-range:0 120px}
 }
 @keyframes grow-x{to{transform:scaleX(1)}}
-@keyframes header-elevate{to{box-shadow:inset 0 3px 0 var(--red),0 8px 24px rgba(11,37,69,.12);background:rgba(255,255,255,.92);backdrop-filter:blur(8px)}}
+@keyframes header-elevate{to{box-shadow:inset 0 3px 0 var(--red),0 8px 24px rgba(11,37,69,.12);background:rgba(255,255,255,.98);backdrop-filter:blur(10px)}}
 
 /* Revelar ao rolar: painéis, seções do relatório e linhas de tabela */
 @supports (animation-timeline: view()){
@@ -89,3 +89,5 @@ tbody tr:hover{background:#f6f8fc}
 @media (prefers-reduced-motion: reduce){.sk::after{display:none}}
 .empty svg{color:#9fb0c9;animation:float 3s ease-in-out infinite}.empty p{margin:8px 0 0}
 @keyframes float{50%{transform:translateY(-4px)}}
+
+@media(max-width:760px){.sidebar nav a.active{box-shadow:inset 0 -3px 0 var(--red)}}

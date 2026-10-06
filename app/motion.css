@@ -69,3 +69,23 @@ tbody tr:hover{background:#f6f8fc}
 @keyframes toast-in{from{opacity:0;transform:translateY(20px) scale(.96)}}
 @keyframes shrink-x{to{transform:scaleX(0)}}
 @media(max-width:760px){.toast{left:16px;right:16px;bottom:84px}}
+
+/* ---------- Skeleton loading (substitui o spinner) ---------- */
+.sk{position:relative;overflow:hidden;background:#e7ecf4;border-radius:8px}
+.sk::after{content:"";position:absolute;inset:0;transform:translateX(-100%);background:linear-gradient(90deg,transparent,rgba(255,255,255,.65),transparent);animation:shimmer 1.3s infinite}
+@keyframes shimmer{to{transform:translateX(100%)}}
+.sk-line{height:12px;margin-bottom:12px}.sk-line.lg{height:26px}
+.w30{width:30%}.w40{width:40%}.w50{width:50%}.w60{width:60%}
+.sk-head{margin-bottom:25px}
+.sk-card{animation:none}
+.sk-chart{height:240px;margin-top:8px}
+.sk-row{height:42px;margin-bottom:8px;animation:pulse-in .4s both}
+.sk-table{padding:4px 0}
+.sk-banner{height:96px;margin-bottom:20px}
+.sk-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:9px;margin-bottom:20px}.sk-box{height:70px}
+@keyframes pulse-in{from{opacity:0}}
+.sr-only{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+@media(max-width:760px){.sk-grid{grid-template-columns:1fr 1fr}}
+@media (prefers-reduced-motion: reduce){.sk::after{display:none}}
+.empty svg{color:#9fb0c9;animation:float 3s ease-in-out infinite}.empty p{margin:8px 0 0}
+@keyframes float{50%{transform:translateY(-4px)}}

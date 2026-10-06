@@ -24,7 +24,17 @@ npm run build
 npm start
 ```
 
-Também é possível clicar duas vezes em `start.bat`; ele instala as dependências e gera o build na primeira execução, abre o navegador e inicia o sistema.
+### Iniciar com dois cliques (Windows)
+
+Clique duas vezes em **`iniciar.bat`** (o antigo `start.bat` continua funcionando). Ele:
+
+- confere se o Node.js 20+ está instalado;
+- instala as dependências na primeira vez ou quando o `package-lock.json` mudar;
+- gera o build na primeira vez **e sempre que o código for atualizado** (ex.: após um `git pull`);
+- inicia o sistema e abre o navegador automaticamente quando ele estiver pronto;
+- se o sistema já estiver aberto, apenas abre o navegador.
+
+Mantenha a janela aberta enquanto usar o sistema. Dica: crie um atalho do `iniciar.bat` na Área de Trabalho.
 
 ## Configuração do ambiente
 

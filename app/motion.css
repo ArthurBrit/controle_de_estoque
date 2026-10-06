@@ -42,3 +42,30 @@ body:has(.export-bar) .to-top{bottom:100px}
   .panel,.report-charts>section,.summary-cards>div,tbody tr,.main>header,.scroll-progress{animation:none!important}
   .scroll-progress{display:none}
 }
+
+/* ---------- Micro-interações (120–240ms, transform/opacity) ---------- */
+.btn{transition:transform var(--fast) var(--ease-out),background var(--fast),box-shadow var(--fast)}
+.btn:active:not(:disabled){transform:scale(.97)}
+.btn:focus-visible,.icon-btn:focus-visible,.sidebar nav a:focus-visible,.to-top:focus-visible,input:focus-visible,select:focus-visible,textarea:focus-visible{outline:3px solid rgba(200,16,46,.35);outline-offset:2px}
+.sidebar nav a svg{transition:transform var(--fast) var(--ease-spring)}
+.sidebar nav a:hover svg{transform:translateX(3px)}
+.stat:nth-child(1){animation-delay:0ms}.stat:nth-child(2){animation-delay:70ms}.stat:nth-child(3){animation-delay:140ms}.stat:nth-child(4){animation-delay:210ms}
+.stat-icon{transition:transform var(--base) var(--ease-spring)}
+.stat:hover .stat-icon{transform:rotate(-8deg) scale(1.08)}
+.stat{position:relative;overflow:hidden}
+.stat::after{content:"";position:absolute;left:0;bottom:0;height:3px;width:100%;background:var(--primary);transform:scaleX(0);transform-origin:0 50%;transition:transform var(--base) var(--ease-out)}
+.stat:has(.stat-icon.red)::after{background:var(--red)}
+.stat:hover::after{transform:scaleX(1)}
+tbody tr{transition:background var(--fast)}
+tbody tr:hover{background:#f6f8fc}
+.icon-btn{transition:background var(--fast),color var(--fast),transform var(--fast) var(--ease-spring)}
+.icon-btn:hover{transform:rotate(-30deg)}
+
+/* Toast com ícone, botão de fechar e barra de tempo */
+.toast{display:flex;align-items:center;gap:10px;padding:14px 14px 16px 16px;max-width:min(420px,calc(100vw - 32px));overflow:hidden;animation:toast-in .35s var(--ease-spring) both}
+.toast-close{border:0;background:transparent;color:inherit;opacity:.7;cursor:pointer;padding:2px;display:grid;place-items:center;margin-left:4px}
+.toast-close:hover{opacity:1}
+.toast-timer{position:absolute;left:0;bottom:0;height:3px;width:100%;background:rgba(255,255,255,.55);transform-origin:0 50%;animation:shrink-x 4.5s linear both}
+@keyframes toast-in{from{opacity:0;transform:translateY(20px) scale(.96)}}
+@keyframes shrink-x{to{transform:scaleX(0)}}
+@media(max-width:760px){.toast{left:16px;right:16px;bottom:84px}}

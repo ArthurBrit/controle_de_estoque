@@ -1,7 +1,12 @@
 "use client";
 import { useEffect, useState } from "react";
-export function Toast({message,type="success",onClose}:{message:string;type?:"success"|"error";onClose:()=>void}){useEffect(()=>{const t=setTimeout(onClose,4500);return()=>clearTimeout(t)},[onClose]);return <div className={`toast ${type}`}>{message}</div>}
-export function Loading(){return <div className="loading"><span/><p>Carregando informações...</p></div>}
-export function Empty({text="Nenhuma movimentação encontrada."}:{text?:string}){return <div className="empty">{text}</div>}
+import { CircleAlert, CircleCheck, Inbox, X } from "lucide-react";
+export function Toast({message,type="success",onClose}:{message:string;type?:"success"|"error";onClose:()=>void}){useEffect(()=>{const t=setTimeout(onClose,4500);return()=>clearTimeout(t)},[onClose]);const Icon=type==="error"?CircleAlert:CircleCheck;return <div className={`toast ${type}`} role={type==="error"?"alert":"status"}><Icon size={20}/><span>{message}</span><button type="button" className="toast-close" aria-label="Fechar" onClick={onClose}><X size={16}/></button><i className="toast-timer"/></div>}
+export function Loading({variant="table"}:{variant?:"dashboard"|"table"|"report"}){const rows=(n:number)=>Array.from({length:n},(_,i)=><div key={i} className="sk sk-row" style={{animationDelay:`${i*80}ms`}}/>);return <div className="skeleton" role="status" aria-live="polite" aria-label="Carregando informações">
+ {variant==="dashboard"&&<><div className="sk-head"><div className="sk sk-line w30"/><div className="sk sk-line w50 lg"/></div><div className="stats">{Array.from({length:4},(_,i)=><div key={i} className="stat sk-card"><div className="sk sk-line w40"/><div className="sk sk-line w30 lg"/><div className="sk sk-line w60"/></div>)}</div><div className="panel"><div className="sk sk-line w30"/><div className="sk sk-chart"/></div></>}
+ {variant==="report"&&<div className="panel"><div className="sk sk-banner"/><div className="sk-grid">{Array.from({length:7},(_,i)=><div key={i} className="sk sk-box"/>)}</div><div className="sk sk-chart"/></div>}
+ {variant==="table"&&<div className="sk-table">{rows(6)}</div>}
+ <span className="sr-only">Carregando informações...</span></div>}
+export function Empty({text="Nenhuma movimentação encontrada."}:{text?:string}){return <div className="empty"><div><Inbox size={30} strokeWidth={1.6}/><p>{text}</p></div></div>}
 export function Modal({title,children,onClose}:{title:string;children:React.ReactNode;onClose:()=>void}){return <div className="modal-backdrop" onMouseDown={onClose}><div className="modal" onMouseDown={e=>e.stopPropagation()}><h2>{title}</h2>{children}</div></div>}
 export function useToast(){const [toast,setToast]=useState<{message:string;type:"success"|"error"}|null>(null);return {show:(message:string,type:"success"|"error"="success")=>setToast({message,type}),node:toast?<Toast {...toast} onClose={()=>setToast(null)}/>:null}}

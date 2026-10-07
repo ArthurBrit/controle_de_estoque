@@ -17,8 +17,8 @@ data/*.sqlite
 data/*.sqlite-*
 data/*.sqlite3
 data/*.sqlite3-*
-backup/
-backups/
+/backup/
+/backups/
 *.db
 *.db-*
 *.sqlite

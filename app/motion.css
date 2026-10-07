@@ -1,0 +1,93 @@
+/* ==========================================================================
+   Movimento e efeitos de scroll
+   Referências: CSS Scroll-driven Animations (animation-timeline: view()/scroll())
+   e prefers-reduced-motion. Sem bibliotecas: tudo nativo do navegador.
+   ========================================================================== */
+:root{--ease-out:cubic-bezier(.22,1,.36,1);--ease-spring:cubic-bezier(.34,1.56,.64,1);--fast:160ms;--base:240ms}
+html{scroll-behavior:smooth}
+
+/* Barra de progresso de leitura no topo (vermelha) */
+.scroll-progress{position:fixed;top:0;left:0;right:0;height:3px;z-index:60;background:linear-gradient(90deg,var(--red),#ff4d6a);transform-origin:0 50%;transform:scaleX(0);pointer-events:none}
+@supports (animation-timeline: scroll()){
+  .scroll-progress{animation:grow-x linear both;animation-timeline:scroll(root block)}
+  /* Cabeçalho fica fixo e ganha sombra conforme a página rola */
+  .main>header{position:sticky;top:0;z-index:15;animation:header-elevate linear both;animation-timeline:scroll(root block);animation-range:0 120px}
+}
+@keyframes grow-x{to{transform:scaleX(1)}}
+@keyframes header-elevate{to{box-shadow:inset 0 3px 0 var(--red),0 8px 24px rgba(11,37,69,.12);background:rgba(255,255,255,.98);backdrop-filter:blur(10px)}}
+
+/* Revelar ao rolar: painéis, seções do relatório e linhas de tabela */
+@supports (animation-timeline: view()){
+  .panel,.report-charts>section,.summary-cards>div{animation:reveal-up linear both;animation-timeline:view();animation-range:entry 0% entry 35%}
+  tbody tr{animation:reveal-fade linear both;animation-timeline:view();animation-range:entry 0% entry 60%}
+}
+@keyframes reveal-up{from{opacity:0;transform:translateY(28px) scale(.985)}to{opacity:1;transform:none}}
+@keyframes reveal-fade{from{opacity:0;transform:translateX(-8px)}to{opacity:1;transform:none}}
+
+/* Entrada de página ao navegar entre telas */
+.page-enter{animation:page-in .38s var(--ease-out) both}
+@keyframes page-in{from{opacity:0;transform:translateY(10px)}}
+
+/* Botão "voltar ao topo" */
+.to-top{position:fixed;right:24px;bottom:24px;z-index:40;width:46px;height:46px;border:0;border-radius:50%;display:grid;place-items:center;cursor:pointer;color:#fff;background:var(--primary-dark);box-shadow:0 10px 24px rgba(11,37,69,.3);opacity:0;transform:translateY(16px) scale(.9);pointer-events:none;transition:opacity var(--base) var(--ease-out),transform var(--base) var(--ease-out),background var(--fast)}
+.to-top.show{opacity:1;transform:none;pointer-events:auto}
+.to-top:hover{background:var(--red)}
+body:has(.export-bar) .to-top{bottom:100px}
+@media(max-width:760px){.to-top{bottom:84px;right:16px}body:has(.export-bar) .to-top{bottom:160px}}
+
+/* Acessibilidade: quem prefere menos movimento não vê animações de deslocamento */
+@media (prefers-reduced-motion: reduce){
+  html{scroll-behavior:auto}
+  *,*::before,*::after{animation-duration:1ms!important;animation-iteration-count:1!important;transition-duration:1ms!important}
+  .panel,.report-charts>section,.summary-cards>div,tbody tr,.main>header,.scroll-progress{animation:none!important}
+  .scroll-progress{display:none}
+}
+
+/* ---------- Micro-interações (120–240ms, transform/opacity) ---------- */
+.btn{transition:transform var(--fast) var(--ease-out),background var(--fast),box-shadow var(--fast)}
+.btn:active:not(:disabled){transform:scale(.97)}
+.btn:focus-visible,.icon-btn:focus-visible,.sidebar nav a:focus-visible,.to-top:focus-visible,input:focus-visible,select:focus-visible,textarea:focus-visible{outline:3px solid rgba(200,16,46,.35);outline-offset:2px}
+.sidebar nav a svg{transition:transform var(--fast) var(--ease-spring)}
+.sidebar nav a:hover svg{transform:translateX(3px)}
+.stat:nth-child(1){animation-delay:0ms}.stat:nth-child(2){animation-delay:70ms}.stat:nth-child(3){animation-delay:140ms}.stat:nth-child(4){animation-delay:210ms}
+.stat-icon{transition:transform var(--base) var(--ease-spring)}
+.stat:hover .stat-icon{transform:rotate(-8deg) scale(1.08)}
+.stat{position:relative;overflow:hidden}
+.stat::after{content:"";position:absolute;left:0;bottom:0;height:3px;width:100%;background:var(--primary);transform:scaleX(0);transform-origin:0 50%;transition:transform var(--base) var(--ease-out)}
+.stat:has(.stat-icon.red)::after{background:var(--red)}
+.stat:hover::after{transform:scaleX(1)}
+tbody tr{transition:background var(--fast)}
+tbody tr:hover{background:#f6f8fc}
+.icon-btn{transition:background var(--fast),color var(--fast),transform var(--fast) var(--ease-spring)}
+.icon-btn:hover{transform:rotate(-30deg)}
+
+/* Toast com ícone, botão de fechar e barra de tempo */
+.toast{display:flex;align-items:center;gap:10px;padding:14px 14px 16px 16px;max-width:min(420px,calc(100vw - 32px));overflow:hidden;animation:toast-in .35s var(--ease-spring) both}
+.toast-close{border:0;background:transparent;color:inherit;opacity:.7;cursor:pointer;padding:2px;display:grid;place-items:center;margin-left:4px}
+.toast-close:hover{opacity:1}
+.toast-timer{position:absolute;left:0;bottom:0;height:3px;width:100%;background:rgba(255,255,255,.55);transform-origin:0 50%;animation:shrink-x 4.5s linear both}
+@keyframes toast-in{from{opacity:0;transform:translateY(20px) scale(.96)}}
+@keyframes shrink-x{to{transform:scaleX(0)}}
+@media(max-width:760px){.toast{left:16px;right:16px;bottom:84px}}
+
+/* ---------- Skeleton loading (substitui o spinner) ---------- */
+.sk{position:relative;overflow:hidden;background:#e7ecf4;border-radius:8px}
+.sk::after{content:"";position:absolute;inset:0;transform:translateX(-100%);background:linear-gradient(90deg,transparent,rgba(255,255,255,.65),transparent);animation:shimmer 1.3s infinite}
+@keyframes shimmer{to{transform:translateX(100%)}}
+.sk-line{height:12px;margin-bottom:12px}.sk-line.lg{height:26px}
+.w30{width:30%}.w40{width:40%}.w50{width:50%}.w60{width:60%}
+.sk-head{margin-bottom:25px}
+.sk-card{animation:none}
+.sk-chart{height:240px;margin-top:8px}
+.sk-row{height:42px;margin-bottom:8px;animation:pulse-in .4s both}
+.sk-table{padding:4px 0}
+.sk-banner{height:96px;margin-bottom:20px}
+.sk-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:9px;margin-bottom:20px}.sk-box{height:70px}
+@keyframes pulse-in{from{opacity:0}}
+.sr-only{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+@media(max-width:760px){.sk-grid{grid-template-columns:1fr 1fr}}
+@media (prefers-reduced-motion: reduce){.sk::after{display:none}}
+.empty svg{color:#9fb0c9;animation:float 3s ease-in-out infinite}.empty p{margin:8px 0 0}
+@keyframes float{50%{transform:translateY(-4px)}}
+
+@media(max-width:760px){.sidebar nav a.active{box-shadow:inset 0 -3px 0 var(--red)}}
